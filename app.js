@@ -1,10 +1,18 @@
 const fs = require('fs');
 const express = require('express');
+const morgan = require('morgan');
 
 const app = express();
 
 // middleware (stands between middle of the request and the response)
+app.use(morgan('dev'));
 app.use(express.json());
+
+// Our own middleware function
+app.use((req, res, next) => {
+   console.log('Hello from the middleware 👋');
+   next();
+});
 
 const tours = JSON.parse(
    fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
