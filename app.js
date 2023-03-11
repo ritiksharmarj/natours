@@ -56,6 +56,21 @@ app.patch('/api/v1/tours/:id', (req, res) => {
    });
 });
 
+// Delete the partial data using DELETE request
+app.delete('/api/v1/tours/:id', (req, res) => {
+   if (+req.params.id > tours.length)
+      return res.status(404).json({
+         status: 'fail',
+         message: 'Invalid ID',
+      });
+
+   // we don't send any data back
+   res.status(204).json({
+      status: 'success',
+      data: null,
+   });
+});
+
 // Create a new tour (Post request - from the client to the server)
 app.post('/api/v1/tours', (req, res) => {
    //  console.log(req.body);
