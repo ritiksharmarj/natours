@@ -89,6 +89,33 @@ app.patch('/api/v1/tours/:id', (req, res) => {
   );
 });
 
+// DELETE - Delete tour
+app.delete('/api/v1/tours/:id', (req, res) => {
+  const tourId = +req.params.id;
+  const tour = tours.find((el) => el.id === tourId);
+
+  if (!tour) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Invalid ID',
+    });
+  }
+
+  const tourIndex = tours.findIndex((el) => el.id === tourId);
+  tours.splice(tourIndex, 1);
+
+  writeFile(
+    './dev-data/data/tours-simple.json',
+    JSON.stringify(tours),
+    (err) => {
+      res.status(204).json({
+        status: 'success',
+        data: null,
+      });
+    }
+  );
+});
+
 // Create a server on 127.0.0.1:8000
 app.listen(8000, () => {
   console.log('Server started 🖐');
