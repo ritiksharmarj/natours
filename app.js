@@ -20,6 +20,7 @@ app.get('/api/v1/tours', (req, res) => {
   });
 });
 
+// GET - Get tour
 app.get('/api/v1/tours/:id', (req, res) => {
   const tourId = +req.params.id;
   const tour = tours.find((el) => el.id === tourId);
@@ -54,6 +55,34 @@ app.post('/api/v1/tours', (req, res) => {
         status: 'success',
         data: {
           tour: newTour,
+        },
+      });
+    }
+  );
+});
+
+// PATCH - Update tour
+app.patch('/api/v1/tours/:id', (req, res) => {
+  const tourId = +req.params.id;
+  const tour = tours.find((el) => el.id === tourId);
+
+  if (!tour) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Invalid ID',
+    });
+  }
+
+  const updatedTour = Object.assign(tour, req.body);
+
+  writeFile(
+    './dev-data/data/tours-simple.json',
+    JSON.stringify(tours),
+    (err) => {
+      res.status(201).json({
+        status: 'success',
+        data: {
+          tour: updatedTour,
         },
       });
     }
