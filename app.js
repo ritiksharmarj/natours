@@ -153,23 +153,23 @@ const deleteUser = (req, res) => {
   });
 };
 
-// Implementing the "tours" routes
-app.route('/api/v1/tours').get(getAllTours).post(createTour);
+/////////////////////////////////
+// ROUTES
 
-app
-  .route('/api/v1/tours/:id')
-  .get(getTour)
-  .patch(updateTour)
-  .delete(deleteTour);
+// Create and mount routers
+const tourRouter = express.Router();
+const userRouter = express.Router();
+
+app.use('/api/v1/tours', tourRouter);
+app.use('/api/v1/users', userRouter);
+
+// Implementing the "tours" routes
+tourRouter.route('/').get(getAllTours).post(createTour);
+tourRouter.route('/:id').get(getTour).patch(updateTour).delete(deleteTour);
 
 // Implementing the "users" routes
-app.route('/api/v1/users').get(getAllUsers).post(createUser);
-
-app
-  .route('/api/v1/users/:id')
-  .get(getUser)
-  .patch(updateUser)
-  .delete(deleteUser);
+userRouter.route('/').get(getAllUsers).post(createUser);
+userRouter.route('/:id').get(getUser).patch(updateUser).delete(deleteUser);
 
 // Create a server on 127.0.0.1:8000
 app.listen(8000, () => {
