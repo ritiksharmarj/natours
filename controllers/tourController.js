@@ -5,7 +5,7 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
 );
 
-// Param Middleware - Check if "ID" isn't available return "fail"
+// Param Middleware - Check if "ID" isn't valid return "fail"
 exports.checkID = (req, res, next, val) => {
   const tourId = +req.params.id;
   const tour = tours.find((el) => el.id === tourId);
@@ -14,6 +14,17 @@ exports.checkID = (req, res, next, val) => {
     return res.status(404).json({
       status: 'fail',
       message: 'Invalid ID',
+    });
+  }
+  next();
+};
+
+// Middleware to check before create new tour that there should be name and price
+exports.checkBody = (req, res, next) => {
+  if (!req.body.name || !req.body.price) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Missing name or price!',
     });
   }
   next();
