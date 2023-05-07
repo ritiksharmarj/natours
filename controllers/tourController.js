@@ -5,6 +5,20 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
 );
 
+// Param Middleware - Check if "ID" isn't available return "fail"
+exports.checkID = (req, res, next, val) => {
+  const tourId = +req.params.id;
+  const tour = tours.find((el) => el.id === tourId);
+
+  if (!tour) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Invalid ID',
+    });
+  }
+  next();
+};
+
 /**
  * @description - Get All Tour
  * @route - GET /api/v1/tours
@@ -26,13 +40,6 @@ exports.getAllTours = (req, res) => {
 exports.getTour = (req, res) => {
   const tourId = +req.params.id;
   const tour = tours.find((el) => el.id === tourId);
-
-  if (!tour) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'Invalid ID',
-    });
-  }
 
   res.status(200).json({
     status: 'success',
@@ -74,13 +81,6 @@ exports.updateTour = (req, res) => {
   const tourId = +req.params.id;
   const tour = tours.find((el) => el.id === tourId);
 
-  if (!tour) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'Invalid ID',
-    });
-  }
-
   const updatedTour = Object.assign(tour, req.body);
 
   fs.writeFile(
@@ -103,14 +103,6 @@ exports.updateTour = (req, res) => {
  */
 exports.deleteTour = (req, res) => {
   const tourId = +req.params.id;
-  const tour = tours.find((el) => el.id === tourId);
-
-  if (!tour) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'Invalid ID',
-    });
-  }
 
   const tourIndex = tours.findIndex((el) => el.id === tourId);
   tours.splice(tourIndex, 1);
