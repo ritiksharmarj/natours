@@ -72,22 +72,43 @@ exports.createTour = async (req, res) => {
  * @description - Update Tour
  * @route - PATCH /api/v1/tours/:id
  */
-exports.updateTour = (req, res) => {
-  // res.status(201).json({
-  //   status: 'success',
-  //   data: {
-  //     tour: updatedTour,
-  //   },
-  // });
+exports.updateTour = async (req, res) => {
+  try {
+    const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
+      new: true, // return the modified document rather than the original
+      runValidators: true, // validate the update operation against the model's schema
+    });
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        tour,
+      },
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: 'fail',
+      message: error,
+    });
+  }
 };
 
 /**
  * @description - Delete Tour
  * @route - DELETE /api/v1/tours/:id
  */
-exports.deleteTour = (req, res) => {
-  // res.status(204).json({
-  //   status: 'success',
-  //   data: null,
-  // });
+exports.deleteTour = async (req, res) => {
+  try {
+    await Tour.findByIdAndDelete(req.params.id);
+
+    res.status(204).json({
+      status: 'success',
+      data: null,
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: 'fail',
+      message: error,
+    });
+  }
 };
