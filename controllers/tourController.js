@@ -6,8 +6,26 @@ const Tour = require('../models/tourModel');
  */
 exports.getAllTours = async (req, res) => {
   try {
-    const tours = await Tour.find();
+    console.log(req.query);
+    // Extract filters from query string
+    const queryObj = { ...req.query };
+    const excludedFields = ['page', 'sort', 'limit', 'fields'];
+    excludedFields.forEach((el) => delete queryObj[el]);
 
+    // Advanced filtering
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(
+      /\b(gt|gte|lt|lte|eq|ne)\b/g,
+      (match) => `$${match}`
+    ); // queryStr: { 'duration': { '$gte': '3' }}
+
+    // Build query
+    let query = Tour.find(JSON.parse(queryStr));
+
+    // Execute query
+    const tours = await query;
+
+    // Send response
     res.status(200).json({
       status: 'success',
       results: tours.length,
@@ -18,7 +36,7 @@ exports.getAllTours = async (req, res) => {
   } catch (error) {
     res.status(404).json({
       status: 'fail',
-      message: error,
+      message: error.message,
     });
   }
 };
@@ -40,7 +58,7 @@ exports.getTour = async (req, res) => {
   } catch (error) {
     res.status(404).json({
       status: 'fail',
-      message: error,
+      message: error.message,
     });
   }
 };
@@ -63,7 +81,7 @@ exports.createTour = async (req, res) => {
   } catch (error) {
     res.status(400).json({
       status: 'fail',
-      message: error,
+      message: error.message,
     });
   }
 };
@@ -88,7 +106,7 @@ exports.updateTour = async (req, res) => {
   } catch (error) {
     res.status(404).json({
       status: 'fail',
-      message: error,
+      message: error.message,
     });
   }
 };
@@ -108,7 +126,7 @@ exports.deleteTour = async (req, res) => {
   } catch (error) {
     res.status(404).json({
       status: 'fail',
-      message: error,
+      message: error.message,
     });
   }
 };
