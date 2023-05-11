@@ -7,12 +7,12 @@ const Tour = require('../models/tourModel');
 exports.getAllTours = async (req, res) => {
   try {
     console.log(req.query);
-    // Extract filters from query string
+    // 1A - Filtering: extract filters from query string
     const queryObj = { ...req.query };
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
     excludedFields.forEach((el) => delete queryObj[el]);
 
-    // Advanced filtering
+    // 1B - Advanced filtering
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(
       /\b(gt|gte|lt|lte|eq|ne)\b/g,
@@ -21,6 +21,22 @@ exports.getAllTours = async (req, res) => {
 
     // Build query
     let query = Tour.find(JSON.parse(queryStr));
+
+    // 2 - Sorting
+    if (req.query.sort) {
+      /**
+       * /api/v1/tours?sort=price,-ratingsAverage
+       * sorting the tours by "price" in ascending order
+       * "ratingsAverage" in descending order (denoted by the "-" before "ratingsAverage")
+       *
+       * equivalent - query.sort('price -ratingsAverage');
+       */
+      const sortBy = req.query.sort.split(',').join(' ');
+      query = query.sort(sortBy);
+    } else {
+      // If sort field empty then results should be sorted in descending order to show the newest one first.
+      query = query.sort('-createdAt');
+    }
 
     // Execute query
     const tours = await query;
