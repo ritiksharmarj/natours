@@ -1,12 +1,23 @@
 const Tour = require('../models/tourModel');
 
 /**
+ * @middleware - aliasTopTours
+ * @description - Get Top Tours
+ * @route - GET /api/v1/tours/top-5-cheap
+ */
+exports.aliasTopTours = (req, res, next) => {
+  req.query.limit = 5;
+  req.query.sort = '-ratingsAverage,price';
+  req.query.fields = 'name,price,ratingsAverage,summary,difficulty';
+  next();
+};
+
+/**
  * @description - Get All Tours
  * @route - GET /api/v1/tours
  */
 exports.getAllTours = async (req, res) => {
   try {
-    console.log(req.query);
     /////////////////////////////////
     // 1A - Filtering: extract filters from query string
     const queryObj = { ...req.query };
