@@ -34,8 +34,22 @@ exports.getAllTours = async (req, res) => {
       const sortBy = req.query.sort.split(',').join(' ');
       query = query.sort(sortBy);
     } else {
-      // If sort field empty then results should be sorted in descending order to show the newest one first.
+      // If sort field empty then results should be sorted in descending order to show the newest document first.
       query = query.sort('-createdAt');
+    }
+
+    // 3 - Field limiting
+    if (req.query.fields) {
+      /**
+       * /api/v1/tours?fields=name,duration,difficulty,price
+       * In this case, the response will only include the "name", "duration", "difficulty", and "price" fields, rather than returning all the fields of the tours resource.
+       *
+       * equivalent - query.select('name duration difficulty price');
+       */
+      const fields = req.query.fields.split(',').join(' ');
+      query = query.select(fields);
+    } else {
+      query = query.select('-__v');
     }
 
     // Execute query
