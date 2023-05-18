@@ -3,7 +3,7 @@ const catchAsync = require('../utils/catchAsync');
 
 /**
  * @description - Create New User
- * @route - POST /api/v1/users
+ * @route - POST /api/v1/users/signup
  */
 exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create(req.body);

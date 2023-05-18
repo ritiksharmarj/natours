@@ -49,6 +49,22 @@ const userSchema = new mongoose.Schema({
   // },
 });
 
+/**
+ * when a document is created and later any of the values is updated/changed, that property would be considered as modified and the mongoose isModified returns true if that particular property has been modified or false if it hasn't been modified.
+ * Hash the password before saving it to database
+ */
+userSchema.pre('save', async function (next) {
+  // Only run this function if password was actually modified
+  if (!this.isModified('password')) return next();
+
+  // Hash the password with cost of 12
+  this.password = await bcrypt.hash(this.password, 12);
+
+  // Delete passwordConfirm field
+  this.passwordConfirm = undefined;
+  next();
+});
+
 // Creating a model
 const User = mongoose.model('User', userSchema);
 
