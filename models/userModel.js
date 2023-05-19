@@ -1,7 +1,6 @@
-const crypto = require('crypto');
 const mongoose = require('mongoose');
 const validator = require('validator');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 
 // Defining schema
 const userSchema = new mongoose.Schema({
@@ -64,6 +63,21 @@ userSchema.pre('save', async function (next) {
   this.passwordConfirm = undefined;
   next();
 });
+
+/**
+ * Our own custom document instance methods
+ * https://mongoosejs.com/docs/guide.html#methods
+ *
+ * @param {String} plainTextPassword - User's current entered password
+ * @param {String} hashPassword - User password from database
+ * @returns - True or False
+ */
+userSchema.methods.correctPassword = async function (
+  plainTextPassword,
+  hashPassword
+) {
+  return await bcrypt.compare(plainTextPassword, hashPassword);
+};
 
 // Creating a model
 const User = mongoose.model('User', userSchema);
