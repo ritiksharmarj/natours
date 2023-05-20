@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { promisify } = require('util');
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
@@ -51,7 +52,7 @@ exports.login = catchAsync(async (req, res, next) => {
    * 3) Check if user not exists or password is incorrect
    * correctPassword our own custom document instance methods from "userModel.js" which returns boolean
    */
-  if (!user || !(await user.correctPassword(password, user.password))) {
+  if (!user || !(await user.comparePassword(password, user.password))) {
     return next(new AppError('Incorrect email or password', 401));
   }
 
@@ -61,4 +62,40 @@ exports.login = catchAsync(async (req, res, next) => {
     status: 'success',
     token,
   });
+});
+
+/**
+ * Middleware function to check if the user is authenticated
+ * @description - Protect "getAllTours" route, only login user can access
+ * @route - GET /api/v1/tours
+ */
+exports.protect = catchAsync(async (req, res, next) => {
+  // 1) Getting token, and check if it's there
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    token = req.headers.authorization.split(' ')[1];
+  }
+
+  if (!token) {
+    return next(new AppError('Please login to get access!', 401));
+  }
+
+  // 2) Verification token
+  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+
+  // 3) Check if user still exists
+  const currentUser = await User.findById(decoded.id);
+
+  if (!currentUser) {
+    return next(
+      new AppError('The user associated with this token no longer exists.', 401)
+    );
+  }
+
+  // 4) Check if user changed password after the token was issued
+  // GRANT ACCESS TO PROTECTED ROUTE
+  next();
 });

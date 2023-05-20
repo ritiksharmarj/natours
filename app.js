@@ -16,6 +16,13 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.json()); // to accept JSON data
 app.use(express.static(`${__dirname}/public`));
 
+// Test middleware
+app.use((req, res, next) => {
+  // req.requestTime = new Date().toISOString();
+  // console.log(req.headers);
+  next();
+});
+
 /////////////////////////////////
 // ROUTES
 app.use('/api/v1/tours', tourRouter);

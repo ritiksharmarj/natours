@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema({
       message: 'Passwords are not the same!',
     },
   },
-  // passwordChangedAt: Date,
+  passwordChangedAt: Date,
   // passwordResetToken: String,
   // passwordResetExpires: Date,
   // active: {
@@ -72,7 +72,7 @@ userSchema.pre('save', async function (next) {
  * @param {String} hashPassword - User password from database
  * @returns - True or False
  */
-userSchema.methods.correctPassword = async function (
+userSchema.methods.comparePassword = async function (
   plainTextPassword,
   hashPassword
 ) {
