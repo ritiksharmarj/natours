@@ -66,6 +66,25 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 /**
+ * @description - Forgot Password
+ * @route - POST /api/v1/users/forgotPassword
+ */
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+  // 1) Get user based on posted email
+  const user = await User.findOne({ email: req.body.email });
+
+  if (!user) {
+    return next(new AppError('There is no user with this email address.', 403));
+  }
+
+  // 2) Generate the random reset token for the user
+  const resetToken = user.generatePasswordResetToken();
+  await user.save({ validateBeforeSave: false });
+
+  // 3) Send it to user's email
+});
+
+/**
  * Middleware function to check if the user is authenticated
  * @description - Only login user can access tour routes
  */
