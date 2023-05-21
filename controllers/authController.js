@@ -51,7 +51,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
   /**
    * 3) Check if user not exists or password is incorrect
-   * correctPassword our own custom document instance methods from "userModel.js" which returns boolean
+   * "correctPassword" our own custom document instance methods from "userModel.js" which returns boolean
    */
   if (!user || !(await user.comparePassword(password, user.password))) {
     return next(new AppError('Incorrect email or password', 401));
@@ -67,8 +67,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
 /**
  * Middleware function to check if the user is authenticated
- * @description - Protect "getAllTours" route, only login user can access
- * @route - GET /api/v1/tours
+ * @description - Only login user can access tour routes
  */
 exports.protect = catchAsync(async (req, res, next) => {
   // 1) Getting token, and check if it's there
@@ -96,7 +95,10 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
   }
 
-  // 4) Check if user changed password after the token was issued
+  /**
+   * 4) Check if user changed password after the token was issued
+   * "changedPasswordAfter" is document instance methods from "userModel.js" which returns boolean
+   */
   if (currentUser.changedPasswordAfter(decoded.iat)) {
     return next(
       new AppError('User recently changed password! Please log in again.', 401)
@@ -107,3 +109,20 @@ exports.protect = catchAsync(async (req, res, next) => {
   req.user = currentUser;
   next();
 });
+
+/**
+ * Middleware function to check user's role is either admin or lead-guide
+ * @description - It will restrict to other roles to perform next action
+ */
+exports.restrictTo = (...roles) => {
+  return (req, res, next) => {
+    // roles = ['admin', 'lead-guide'] and if role = 'user'
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new AppError("You don't have permission to perform this action.", 403)
+      );
+    }
+
+    next();
+  };
+};

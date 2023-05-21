@@ -16,11 +16,11 @@ const userSchema = new mongoose.Schema({
     validate: [validator.isEmail, 'Please provide a valid email'],
   },
   photo: String,
-  // role: {
-  //   type: String,
-  //   enum: ['user', 'guide', 'lead-guide', 'admin'],
-  //   default: 'user',
-  // },
+  role: {
+    type: String,
+    enum: ['user', 'guide', 'lead-guide', 'admin'],
+    default: 'user',
+  },
   password: {
     type: String,
     required: [true, 'Please provide a password'],
@@ -70,7 +70,7 @@ userSchema.pre('save', async function (next) {
  *
  * @param {String} plainTextPassword - User's current entered password
  * @param {String} hashPassword - User password from database
- * @returns - True or False
+ * @returns Boolean
  */
 userSchema.methods.comparePassword = async function (
   plainTextPassword,
@@ -79,6 +79,11 @@ userSchema.methods.comparePassword = async function (
   return await bcrypt.compare(plainTextPassword, hashPassword);
 };
 
+/**
+ * Check if user changed password after the token was issued
+ * @param {Number} tokenIssuedAt - Generated jwts will include an iat (issued at)
+ * @returns Boolean
+ */
 userSchema.methods.changedPasswordAfter = function (tokenIssuedAt) {
   if (this.passwordChangedAt) {
     const changedTimestamp = new Date(this.passwordChangedAt).getTime() / 1000;
