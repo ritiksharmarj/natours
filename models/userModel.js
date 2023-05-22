@@ -2,7 +2,6 @@ const crypto = require('crypto');
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
-const { log } = require('console');
 
 // Defining schema
 const userSchema = new mongoose.Schema({
@@ -66,6 +65,13 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+userSchema.pre('save', function (next) {
+  if (!this.isModified('password') || this.isNew) return next();
+
+  this.passwordChangedAt = Date.now() - 1000;
+  next();
+});
+
 /**
  * Our own custom document instance methods
  * https://mongoosejs.com/docs/guide.html#methods
@@ -97,6 +103,10 @@ userSchema.methods.changedPasswordAfter = function (tokenIssuedAt) {
   return false;
 };
 
+/**
+ * Generate reset token to reset password
+ * @returns reset token
+ */
 userSchema.methods.generatePasswordResetToken = function () {
   // simple reset Token for sending to user's mail
   const resetToken = crypto.randomBytes(32).toString('hex');
