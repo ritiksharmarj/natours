@@ -98,14 +98,14 @@ userSchema.methods.changedPasswordAfter = function (tokenIssuedAt) {
 };
 
 userSchema.methods.generatePasswordResetToken = function () {
+  // simple reset Token for sending to user's mail
   const resetToken = crypto.randomBytes(32).toString('hex');
 
+  // encrypted reset token, save to database
   this.passwordResetToken = crypto
     .createHash('sha256')
     .update(resetToken)
     .digest('hex');
-
-  console.log({ resetToken }, this.passwordResetToken);
 
   // Password reset token will be valid for 10 minutes
   this.passwordResetExpires = Date.now() + 10 * 60 * 1000;

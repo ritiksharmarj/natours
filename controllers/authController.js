@@ -3,6 +3,7 @@ const { promisify } = require('util');
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const sendEmail = require('../utils/email');
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -66,25 +67,6 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 /**
- * @description - Forgot Password
- * @route - POST /api/v1/users/forgotPassword
- */
-exports.forgotPassword = catchAsync(async (req, res, next) => {
-  // 1) Get user based on posted email
-  const user = await User.findOne({ email: req.body.email });
-
-  if (!user) {
-    return next(new AppError('There is no user with this email address.', 403));
-  }
-
-  // 2) Generate the random reset token for the user
-  const resetToken = user.generatePasswordResetToken();
-  await user.save({ validateBeforeSave: false });
-
-  // 3) Send it to user's email
-});
-
-/**
  * Middleware function to check if the user is authenticated
  * @description - Only login user can access tour routes
  */
@@ -145,3 +127,51 @@ exports.restrictTo = (...roles) => {
     next();
   };
 };
+
+/**
+ * @description - Forgot Password
+ * @route - POST /api/v1/users/forgotPassword
+ */
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+  // 1) Get user based on posted email
+  const user = await User.findOne({ email: req.body.email });
+
+  if (!user) {
+    return next(new AppError('There is no user with this email address.', 403));
+  }
+
+  // 2) Generate the random reset token for the user
+  const resetToken = user.generatePasswordResetToken(); // without encrypted/simple token
+  await user.save({ validateBeforeSave: false });
+
+  // 3) Send it to user's email
+  const resetURL = `${req.protocol}://${req.get(
+    'host'
+  )}/api/v1/users/resetPassword/${resetToken}`; // e.g. http://127.0.0.1:8000/api/v1/users/resetPassword/2342342
+
+  const message = `Hello ${user.email}!\nSomeone requested a link to change your password. Click the link below to proceed.\n${resetURL}\nIf you didn’t request this, please ignore the email. Your password will stay safe and won’t be changed.`;
+
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: 'Reset password instructions for Natours account',
+      message,
+    });
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Token sent to email!',
+    });
+  } catch (error) {
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save({ validateBeforeSave: false });
+
+    return next(
+      new AppError(
+        'There was an error sending the email. Try again later!',
+        500
+      )
+    );
+  }
+});
