@@ -10,8 +10,12 @@ router.route('/login').post(authController.login);
 router.route('/forgotPassword').post(authController.forgotPassword);
 router.route('/resetPassword/:token').patch(authController.resetPassword);
 router
-  .route('/updatePassword')
+  .route('/updateMyPassword')
   .patch(authController.protect, authController.updatePassword);
+
+router
+  .route('/updateMe')
+  .patch(authController.protect, userController.updateMe);
 
 // Implementing the "users" routes
 router
@@ -24,5 +28,9 @@ router
   .get(userController.getUser)
   .patch(userController.updateUser)
   .delete(userController.deleteUser);
+
+// router
+//   .route('/updateMe')
+//   .patch(authController.protect, userController.updateMe);
 
 module.exports = router;
