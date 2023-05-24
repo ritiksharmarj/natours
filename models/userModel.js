@@ -42,11 +42,11 @@ const userSchema = new mongoose.Schema({
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,
-  // active: {
-  //   type: Boolean,
-  //   default: true,
-  //   select: false,
-  // },
+  active: {
+    type: Boolean,
+    default: true,
+    select: false,
+  },
 });
 
 /**
@@ -69,6 +69,15 @@ userSchema.pre('save', function (next) {
   if (!this.isModified('password') || this.isNew) return next();
 
   this.passwordChangedAt = Date.now() - 1000;
+  next();
+});
+
+/**
+ * The regular expression /^find/ is used to match any query operation that starts with "find". It uses the ^ symbol to match the beginning of the query operation. So, for example, it will match operations like find, findOne, findOneAndUpdate, etc.
+ */
+userSchema.pre(/^find/, function (next) {
+  // this points to the current query
+  this.find({ active: { $ne: false } });
   next();
 });
 
