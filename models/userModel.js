@@ -73,7 +73,7 @@ userSchema.pre('save', function (next) {
 });
 
 /**
- * The regular expression /^find/ is used to match any query operation that starts with "find". It uses the ^ symbol to match the beginning of the query operation. So, for example, it will match operations like find, findOne, findOneAndUpdate, etc.
+ * The regular expression "/^find/" is used to match any query operation that starts with "find". It uses the ^ symbol to match the beginning of the query operation. So, for example, it will match operations like "find", "findOne", "findOneAndUpdate", etc.
  */
 userSchema.pre(/^find/, function (next) {
   // this points to the current query
