@@ -125,7 +125,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 });
 
 /**
- * Middleware function to check user's role is either admin or lead-guide
+ * Middleware function to check user's role
  * @description - It will restrict to other roles to perform next action
  */
 exports.restrictTo = (...roles) => {
