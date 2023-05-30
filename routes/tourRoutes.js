@@ -1,9 +1,13 @@
 const express = require('express');
 const tourController = require('../controllers/tourController');
 const authController = require('../controllers/authController');
-const reviewController = require('../controllers/reviewController');
+const reviewRouter = require('./reviewRoutes');
 
 const router = express.Router();
+
+// POST /tours/273ab4/reviews
+// GET /tours/273ab4/reviews
+router.use('/:tourId/reviews', reviewRouter);
 
 // Alias
 router
@@ -29,13 +33,5 @@ router
     authController.restrictTo('admin', 'lead-guide'),
     tourController.deleteTour
   );
-
-// POST /tours/273ab4/reviews
-// GET /tours/273ab4/reviews
-router.route('/:tourId/reviews').post(
-  authController.protect, // login user can review only
-  authController.restrictTo('user'), // to review, user's role should be "user" not admin, guide, etc.
-  reviewController.createReview
-);
 
 module.exports = router;
