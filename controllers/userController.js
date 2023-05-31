@@ -77,12 +77,7 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
  * @description - Create New User
  * @route - POST /api/v1/users
  */
-exports.createUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!',
-  });
-};
+exports.createUser = factory.createOne(User);
 
 /**
  * @description - Get User (Single)
@@ -99,12 +94,7 @@ exports.getUser = (req, res) => {
  * @description - Update User
  * @route - PATCH /api/v1/users/:id
  */
-exports.updateUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!',
-  });
-};
+exports.updateUser = factory.updateOne(User);
 
 /**
  * @description - Delete User

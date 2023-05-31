@@ -8,10 +8,11 @@ const router = express.Router({ mergeParams: true });
 router.route('/').get(reviewController.getAllReviews).post(
   authController.protect, // login user can review only
   authController.restrictTo('user'), // to review, user's role should be "user" not admin, guide, etc.
+  reviewController.setTourUserIds,
   reviewController.createReview
 );
 
-router.route('/:id').delete(
+router.route('/:id').patch(reviewController.updateReview).delete(
   // authController.protect,
   // authController.restrictTo('user'),
   reviewController.deleteReview
