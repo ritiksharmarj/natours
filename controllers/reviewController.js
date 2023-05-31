@@ -1,12 +1,16 @@
 const Review = require('../models/reviewModel');
 const catchAsync = require('../utils/catchAsync');
+const factory = require('./handlerFactory');
 
 /**
  * @description - Get All Reviews
  * @route - GET /api/v1/reviews
  */
 exports.getAllReviews = catchAsync(async (req, res, next) => {
-  const reviews = await Review.find();
+  let filter = {};
+  if (req.params.tourId) filter = { tour: req.params.tourId };
+
+  const reviews = await Review.find(filter);
 
   // Send response
   res.status(200).json({
@@ -36,3 +40,9 @@ exports.createReview = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+/**
+ * @description - Delete Review
+ * @route - DELETE /api/v1/reviews/:id
+ */
+exports.deleteReview = factory.deleteOne(Review);

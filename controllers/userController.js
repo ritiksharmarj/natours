@@ -1,6 +1,7 @@
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const factory = require('./handlerFactory');
 
 /**
  * Filter req.body object for "name" and "email" and store it to newObj
@@ -109,9 +110,4 @@ exports.updateUser = (req, res) => {
  * @description - Delete User
  * @route - DELETE /api/v1/users/:id
  */
-exports.deleteUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!',
-  });
-};
+exports.deleteUser = factory.deleteOne(User);
