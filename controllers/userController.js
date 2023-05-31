@@ -20,22 +20,9 @@ const filterObj = (obj, ...allowedFields) => {
 };
 
 /**
- * @description - Get All Users
- * @route - GET /api/v1/users
+ * @description - Update current user
+ * @route - PATCH /api/v1/users/updateMe
  */
-exports.getAllUsers = catchAsync(async (req, res, next) => {
-  const users = await User.find();
-
-  // Send response
-  res.status(200).json({
-    status: 'success',
-    results: users.length,
-    data: {
-      users,
-    },
-  });
-});
-
 exports.updateMe = catchAsync(async (req, res, next) => {
   // 1) Create error if user POSTs password data
   if (req.body.password || req.body.passwordConfirm) {
@@ -64,6 +51,10 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   });
 });
 
+/**
+ * @description - Delete current user
+ * @route - DELETE /api/v1/users/deleteMe
+ */
 exports.deleteMe = catchAsync(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user.id, { active: false });
 
@@ -77,18 +68,24 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
  * @description - Create New User
  * @route - POST /api/v1/users
  */
-exports.createUser = factory.createOne(User);
+exports.createUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'This route is not defined! Please use "/signup" instead.',
+  });
+};
+
+/**
+ * @description - Get All Users
+ * @route - GET /api/v1/users
+ */
+exports.getAllUsers = factory.getAll(User);
 
 /**
  * @description - Get User (Single)
  * @route - GET /api/v1/users/:id
  */
-exports.getUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!',
-  });
-};
+exports.getUser = factory.getOne(User);
 
 /**
  * @description - Update User

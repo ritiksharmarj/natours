@@ -12,10 +12,14 @@ router.route('/').get(reviewController.getAllReviews).post(
   reviewController.createReview
 );
 
-router.route('/:id').patch(reviewController.updateReview).delete(
-  // authController.protect,
-  // authController.restrictTo('user'),
-  reviewController.deleteReview
-);
+router
+  .route('/:id')
+  .get(reviewController.getReview)
+  .patch(reviewController.updateReview)
+  .delete(
+    // authController.protect,
+    // authController.restrictTo('user'),
+    reviewController.deleteReview
+  );
 
 module.exports = router;
