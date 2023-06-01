@@ -9,23 +9,18 @@ router.route('/signup').post(authController.signup);
 router.route('/login').post(authController.login);
 router.route('/forgotPassword').post(authController.forgotPassword);
 router.route('/resetPassword/:token').patch(authController.resetPassword);
-router
-  .route('/updateMyPassword')
-  .patch(authController.protect, authController.updatePassword);
 
-router
-  .route('/me')
-  .get(authController.protect, userController.getMe, userController.getUser);
+// Middleware works in sequence so protect all routes after this middleware
+router.use(authController.protect);
 
-router
-  .route('/updateMe')
-  .patch(authController.protect, userController.updateMe);
+router.route('/updateMyPassword').patch(authController.updatePassword);
+router.route('/me').get(userController.getMe, userController.getUser);
+router.route('/updateMe').patch(userController.updateMe);
+router.route('/deleteMe').delete(userController.deleteMe);
 
-router
-  .route('/deleteMe')
-  .delete(authController.protect, userController.deleteMe);
+router.use(authController.restrictTo('admin'));
 
-// Implementing the "users" routes
+// User routes
 router
   .route('/')
   .get(userController.getAllUsers)
