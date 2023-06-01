@@ -95,6 +95,13 @@ exports.getOne = (Model, popOptions) =>
     });
   });
 
+/**
+ * @description - Get ALl [Model]
+ * @route - GET /api/v1/[route-name]
+ *
+ * @param {Array} Model - MongoDB collection
+ * @returns models data
+ */
 exports.getAll = (Model) =>
   catchAsync(async (req, res, next) => {
     // To allow for nested GET reviews on tour (hack)

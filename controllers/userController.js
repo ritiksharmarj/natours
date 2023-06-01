@@ -19,6 +19,12 @@ const filterObj = (obj, ...allowedFields) => {
   return newObj;
 };
 
+// Middleware function for the route "/me"
+exports.getMe = (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
+};
+
 /**
  * @description - Update current user
  * @route - PATCH /api/v1/users/updateMe
