@@ -8,7 +8,7 @@ const tourSchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, 'A tour must have a name'], // specify the error that we want to be displayed when we're missing this field.
-      unique: true, // we can't have two tour documents with the same name.
+      unique: true, // we can't have two or more tour documents with the same name.
       trim: true,
       maxlength: [40, 'A tour name must have less or equal then 40 characters'],
       minlength: [10, 'A tour name must have more or equal then 10 characters'],
@@ -115,6 +115,10 @@ const tourSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
+
+// Indexes - improving read performance
+tourSchema.index({ price: 1, ratingsAverage: -1 });
+tourSchema.index({ slug: 1 });
 
 // Virtual Properties
 tourSchema.virtual('durationWeeks').get(function () {
