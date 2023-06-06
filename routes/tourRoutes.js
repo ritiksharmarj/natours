@@ -31,6 +31,8 @@ router
 // /tours-within?distance=233&center=-40,45&unit=mi
 // /tours-within/233/center/-40,45/unit/mi and it looks nice
 
+router.route('/distances/:latlng/unit/:unit').get(tourController.getDistances);
+
 // Implementing the "tours" routes
 router
   .route('/')
