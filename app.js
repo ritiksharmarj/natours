@@ -25,7 +25,12 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Helmet helps secure Express apps by setting HTTP response headers.
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false,
+  })
+);
 
 // Development logging
 if (process.env.NODE_ENV === 'development') {
