@@ -2,6 +2,10 @@ const Tour = require('../models/tourModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
+/**
+ * @description - Get all tours
+ * @route - GET Root("/")
+ */
 exports.getOverview = catchAsync(async (req, res, next) => {
   // 1) Get tour data from collection
   const tours = await Tour.find();
@@ -11,6 +15,10 @@ exports.getOverview = catchAsync(async (req, res, next) => {
   res.status(200).render('overview', { title: 'All Tours', tours });
 });
 
+/**
+ * @description - Get tour detail page
+ * @route - GET /tour/:slug
+ */
 exports.getTour = catchAsync(async (req, res, next) => {
   // 1) Get the data, for the requested tour (including reviews and guides)
   const tour = await Tour.findOne({ slug: req.params.slug }).populate({
@@ -27,8 +35,22 @@ exports.getTour = catchAsync(async (req, res, next) => {
   res.status(200).render('tour', { title: `${tour.name} Tour`, tour });
 });
 
+/**
+ * @description - Get login page
+ * @route - GET /login
+ */
 exports.getLoginForm = catchAsync(async (req, res) => {
   res.status(200).render('login', {
     title: 'Log into your account',
+  });
+});
+
+/**
+ * @description - Get account page
+ * @route - GET /me
+ */
+exports.getAccount = catchAsync(async (req, res) => {
+  res.status(200).render('account', {
+    title: 'Your account',
   });
 });
