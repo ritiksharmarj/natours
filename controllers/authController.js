@@ -79,6 +79,16 @@ exports.login = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res);
 });
 
+// Log out user by passing dummy token instead and expires in 10 seconds
+exports.logout = (req, res) => {
+  res.cookie('jwt', 'loggedout', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+
+  res.status(200).json({ status: 'success' });
+};
+
 /**
  * Middleware function to check if the user is authenticated
  * @description - Only login user can access tour routes
@@ -127,35 +137,38 @@ exports.protect = catchAsync(async (req, res, next) => {
 });
 
 // Only for rendered pages, no errors!
-exports.isLoggedIn = catchAsync(async (req, res, next) => {
+exports.isLoggedIn = async (req, res, next) => {
   if (req.cookies.jwt) {
-    // 1) Verify token
-    const decoded = await promisify(jwt.verify)(
-      req.cookies.jwt,
-      process.env.JWT_SECRET
-    );
+    try {
+      // 1) Verify token
+      const decoded = await promisify(jwt.verify)(
+        req.cookies.jwt,
+        process.env.JWT_SECRET
+      );
 
-    // 2) Check if user still exists
-    const currentUser = await User.findById(decoded.id);
-    if (!currentUser) {
+      // 2) Check if user still exists
+      const currentUser = await User.findById(decoded.id);
+      if (!currentUser) {
+        return next();
+      }
+
+      /**
+       * 3) Check if user changed password after the token was issued
+       * "changedPasswordAfter" is document instance methods from "userModel.js" which returns boolean
+       */
+      if (currentUser.changedPasswordAfter(decoded.iat)) {
+        return next();
+      }
+
+      // THERE IS A LOGGED IN USER
+      res.locals.user = currentUser; // Here "res.locals" can be accessed by pug templates
+      return next();
+    } catch (error) {
       return next();
     }
-
-    /**
-     * 3) Check if user changed password after the token was issued
-     * "changedPasswordAfter" is document instance methods from "userModel.js" which returns boolean
-     */
-    if (currentUser.changedPasswordAfter(decoded.iat)) {
-      return next();
-    }
-
-    // THERE IS A LOGGED IN USER
-    res.locals.user = currentUser; // Here "res.locals" can be accessed by pug templates
-    return next();
   }
-
   next();
-});
+};
 
 /**
  * Middleware function to check user's role
