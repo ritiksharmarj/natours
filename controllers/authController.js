@@ -126,6 +126,37 @@ exports.protect = catchAsync(async (req, res, next) => {
   next();
 });
 
+// Only for rendered pages, no errors!
+exports.isLoggedIn = catchAsync(async (req, res, next) => {
+  if (req.cookies.jwt) {
+    // 1) Verify token
+    const decoded = await promisify(jwt.verify)(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+
+    // 2) Check if user still exists
+    const currentUser = await User.findById(decoded.id);
+    if (!currentUser) {
+      return next();
+    }
+
+    /**
+     * 3) Check if user changed password after the token was issued
+     * "changedPasswordAfter" is document instance methods from "userModel.js" which returns boolean
+     */
+    if (currentUser.changedPasswordAfter(decoded.iat)) {
+      return next();
+    }
+
+    // THERE IS A LOGGED IN USER
+    res.locals.user = currentUser; // Here "res.locals" can be accessed by pug templates
+    return next();
+  }
+
+  next();
+});
+
 /**
  * Middleware function to check user's role
  * @description - It will restrict to other roles to perform next action
