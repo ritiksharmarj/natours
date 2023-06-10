@@ -48,6 +48,7 @@ app.use('/api', apiLimiter);
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(cookieParser());
 
 // Data sanitization against MongoDB Injection (NoSQL Injection)
