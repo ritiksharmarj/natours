@@ -1,7 +1,35 @@
+const multer = require('multer');
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const factory = require('./handlerFactory');
+
+const multerStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/img/users');
+  },
+  filename: (req, file, cb) => {
+    // user-8736482fgdf783-348763448734.jpeg
+    const ext = file.mimetype.split('/')[1];
+    cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
+  },
+});
+
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb(new AppError('Please upload only image.', 400), false);
+  }
+};
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+});
+
+// Upload user photo using multer
+exports.uploadUserPhoto = upload.single('photo');
 
 /**
  * Filter req.body object for "name" and "email" and store it to newObj
@@ -30,6 +58,9 @@ exports.getMe = (req, res, next) => {
  * @route - PATCH /api/v1/users/updateMe
  */
 exports.updateMe = catchAsync(async (req, res, next) => {
+  console.log('Body: ', req.body);
+  console.log('File: ', req.file);
+
   // 1) Create error if user POSTs password data
   if (req.body.password || req.body.passwordConfirm) {
     return next(
