@@ -80,9 +80,6 @@ exports.getMe = (req, res, next) => {
  * @route - PATCH /api/v1/users/updateMe
  */
 exports.updateMe = catchAsync(async (req, res, next) => {
-  console.log('Body: ', req.body);
-  console.log('File: ', req.file);
-
   // 1) Create error if user POSTs password data
   if (req.body.password || req.body.passwordConfirm) {
     return next(
