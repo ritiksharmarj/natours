@@ -37,14 +37,14 @@ const upload = multer({
 exports.uploadUserPhoto = upload.single('photo');
 
 // Resizing Images
-exports.resizeUserPhoto = (req, res, next) => {
+exports.resizeUserPhoto = async (req, res, next) => {
   // If there is no file uploaded
   if (!req.file) return next();
 
   // user-8736482fgdf783-348763448734.jpeg
   req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
 
-  sharp(req.file.buffer)
+  await sharp(req.file.buffer)
     .resize(500, 500)
     .toFormat('jpeg')
     .jpeg({ quality: 90 })
