@@ -29,7 +29,7 @@ module.exports = class Email {
 
   /**
    * Send the actual email
-   * @param {string} template name of template like welcome, resetpassword
+   * @param {string} template pug template like welcome, passwordReset, etc.
    * @param {string} subject email subject line
    */
   async send(template, subject) {
@@ -60,5 +60,12 @@ module.exports = class Email {
 
   async sendWelcome() {
     await this.send('welcome', 'Welcome to the Natours Family');
+  }
+
+  async sendPasswordReset() {
+    await this.send(
+      'passwordReset',
+      'Reset password instructions for Natours account'
+    );
   }
 };

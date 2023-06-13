@@ -206,6 +206,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   }
 
   // 2) Generate the random reset token for the user
+  // "generatePasswordResetToken" is document instance methods from "userModel"
   const resetToken = user.generatePasswordResetToken(); // without encrypted/simple token
   await user.save({ validateBeforeSave: false });
 
@@ -214,14 +215,9 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     'host'
   )}/api/v1/users/resetPassword/${resetToken}`; // e.g. http://127.0.0.1:8000/api/v1/users/resetPassword/2342342
 
-  const message = `Hello ${user.email}!\nSomeone requested a link to change your password. Click the link below to proceed.\n${resetURL}\nIf you didn’t request this, please ignore the email. Your password will stay safe and won’t be changed.`;
-
   try {
-    // await sendEmail({
-    //   email: user.email,
-    //   subject: 'Reset password instructions for Natours account',
-    //   message,
-    // });
+    // Send password reset email to requested user
+    await new Email(user, resetURL).sendPasswordReset();
 
     res.status(200).json({
       status: 'success',
