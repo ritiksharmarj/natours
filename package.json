@@ -8,8 +8,8 @@
     "dev": "nodemon server.js",
     "prod": "NODE_ENV=production nodemon server.js",
     "debug": "ndb server.js",
-    "watch:js": "esbuild ./public/js/index.js --bundle --outfile=./public/js/bundle.js --watch",
-    "build:js": "esbuild ./public/js/index.js --bundle --minify --outfile=./public/js/bundle.js"
+    "watch": "esbuild ./public/js/index.js --bundle --outfile=./public/js/bundle.js --watch",
+    "build": "esbuild ./public/js/index.js --bundle --minify --outfile=./public/js/bundle.js"
   },
   "repository": {
     "type": "git",
