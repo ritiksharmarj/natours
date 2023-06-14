@@ -7,8 +7,8 @@
     "dev": "nodemon server.js",
     "prod": "NODE_ENV=production nodemon server.js",
     "debug": "ndb server.js",
-    "watch:js": "parcel serve ./public/js/index.js --dist-dir ./public/js/bundled",
-    "build:js": "parcel build ./public/js/index.js --dist-dir ./public/js/bundled"
+    "watch:js": "esbuild ./public/js/index.js --bundle --outfile=./public/js/bundle.js --watch",
+    "build:js": "esbuild ./public/js/index.js --bundle --minify --outfile=./public/js/bundle.js"
   },
   "repository": {
     "type": "git",
@@ -43,8 +43,8 @@
     "xss-clean": "^0.1.1"
   },
   "devDependencies": {
+    "esbuild": "^0.18.2",
     "ndb": "^1.1.5",
-    "nodemon": "^2.0.22",
-    "parcel": "^2.9.2"
+    "nodemon": "^2.0.22"
   }
 }
