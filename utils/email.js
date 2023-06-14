@@ -12,7 +12,7 @@ module.exports = class Email {
 
   transporter() {
     if (process.env.NODE_ENV === 'production') {
-      // SendGrid
+      // Mailtrap
       return 1;
     }
 

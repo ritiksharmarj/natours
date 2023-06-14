@@ -59,7 +59,6 @@ exports.resizeTourImages = catchAsync(async (req, res, next) => {
           .jpeg({ quality: 90 })
           .toFile(`public/img/tours/${filename}`);
 
-        console.log(filename);
         req.body.images.push(filename);
       })
     );
@@ -217,8 +216,6 @@ exports.getToursWithin = catchAsync(async (req, res, next) => {
   const tours = await Tour.find({
     startLocation: { $geoWithin: { $centerSphere: [[lng, lat], radius] } },
   });
-
-  console.log(distance, lat, lng, unit);
 
   res.status(200).json({
     status: 'success',

@@ -13,7 +13,8 @@
 
 # production
 /build
-/public/js/bundle.js
+/public/js/bundled
+.parcel-cache
 
 # misc
 .DS_Store
