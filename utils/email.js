@@ -12,8 +12,15 @@ module.exports = class Email {
 
   transporter() {
     if (process.env.NODE_ENV === 'production') {
-      // Mailtrap
-      return 1;
+      // Mailgun
+      return nodemailer.createTransport({
+        host: process.env.MAILGUN_HOST,
+        port: process.env.MAILGUN_PORT,
+        auth: {
+          user: process.env.MAILGUN_USERNAME,
+          pass: process.env.MAILGUN_PASSWORD,
+        },
+      });
     }
 
     // Transporter object for "dev" environment
