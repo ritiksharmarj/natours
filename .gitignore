@@ -13,8 +13,6 @@
 
 # production
 /build
-/public/js/bundled
-/public/js/bundle.js
 .parcel-cache
 
 # misc
