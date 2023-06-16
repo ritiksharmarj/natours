@@ -2,11 +2,16 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const Tour = require('../models/tourModel');
 const Booking = require('../models/bookingModel');
 const catchAsync = require('../utils/catchAsync');
+const factory = require('./handlerFactory');
 
 // Stripe checkout - https://stripe.com/docs/payments/checkout
 // Stripe JS reference - https://stripe.com/docs/js
 // Stripe API reference - https://stripe.com/docs/api
 
+/**
+ * @description - Create checkout session and send as response
+ * @route - GET /checkout-session/:tourId
+ */
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   // 1) Get the currently booked tour
   const tour = await Tour.findById(req.params.tourId);
@@ -23,7 +28,11 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
           product_data: {
             name: `${tour.name} Tour`,
             description: tour.summary,
-            images: [`https://www.natours.dev/img/tours/${tour.imageCover}`], //TODO change to ${req.protocol}://${req.get('host')}/ like this
+            images: [
+              `${req.protocol}://${req.get('host')}/img/tours/${
+                tour.imageCover
+              }`,
+            ],
           },
         },
       },
@@ -45,6 +54,10 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   });
 });
 
+/**
+ * @description - Get tour, user, and price after successful checkout session
+ * @route - GET /my-bookings (view routes)
+ */
 exports.createBookingCheckout = catchAsync(async (req, res, next) => {
   // This is only TEMPORARY, because it's UNSECURE: everyone can make bookings without paying
   const { tour, user, price } = req.query;
@@ -55,3 +68,9 @@ exports.createBookingCheckout = catchAsync(async (req, res, next) => {
 
   res.redirect(req.originalUrl.split('?')[0]);
 });
+
+exports.createBooking = factory.createOne(Booking);
+exports.getAllBookings = factory.getAll(Booking);
+exports.getBooking = factory.getOne(Booking);
+exports.updateBooking = factory.updateOne(Booking);
+exports.deleteBooking = factory.deleteOne(Booking);
