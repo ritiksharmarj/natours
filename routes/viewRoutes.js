@@ -5,13 +5,7 @@ const bookingController = require('../controllers/bookingController');
 
 const router = express.Router();
 
-router
-  .route('/')
-  .get(
-    bookingController.createBookingCheckout,
-    authController.isLoggedIn,
-    viewsController.getOverview
-  );
+router.route('/').get(authController.isLoggedIn, viewsController.getOverview);
 router
   .route('/tour/:slug')
   .get(authController.isLoggedIn, viewsController.getTour);
@@ -19,6 +13,13 @@ router
   .route('/login')
   .get(authController.isLoggedIn, viewsController.getLoginForm);
 router.route('/me').get(authController.protect, viewsController.getAccount);
+router
+  .route('/my-bookings') // booked tours of current user
+  .get(
+    bookingController.createBookingCheckout,
+    authController.protect,
+    viewsController.getMyBookings
+  );
 
 // router
 //   .route('/submit-user-data')
