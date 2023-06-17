@@ -15,11 +15,7 @@ router
 router.route('/me').get(authController.protect, viewsController.getAccount);
 router
   .route('/my-bookings') // booked tours of current user
-  .get(
-    bookingController.createBookingCheckout,
-    authController.protect,
-    viewsController.getMyBookings
-  );
+  .get(authController.protect, viewsController.getMyBookings);
 
 // router
 //   .route('/submit-user-data')
