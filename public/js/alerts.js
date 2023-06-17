@@ -6,8 +6,9 @@ export const hideAlert = () => {
 /**
  * @param {String} type either "success" or "error"
  * @param {String} message alert message
+ * @param {Number} time time in seconds
  */
-export const showAlert = (type, message) => {
+export const showAlert = (type, message, time = 5) => {
   // first hide all the alerts that already exists.
   hideAlert();
 
@@ -15,5 +16,5 @@ export const showAlert = (type, message) => {
   document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
 
   // hide all the alerts after 5 seconds.
-  window.setTimeout(hideAlert, 5000);
+  window.setTimeout(hideAlert, time * 1000);
 };

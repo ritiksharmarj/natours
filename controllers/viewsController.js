@@ -3,6 +3,16 @@ const Booking = require('../models/bookingModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
+exports.alerts = (req, res, next) => {
+  const { alert } = req.query;
+
+  if (alert === 'booking')
+    res.locals.alert =
+      "Reservation confirmed! Check your inbox for a confirmation email. If your booking doesn't appear immediately, please return later.";
+
+  next();
+};
+
 /**
  * @description - Get all tours
  * @route - GET Root("/")
