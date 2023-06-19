@@ -13,6 +13,9 @@ router
 router
   .route('/login')
   .get(authController.isLoggedIn, viewsController.getLoginForm);
+router
+  .route('/signup')
+  .get(authController.isLoggedIn, viewsController.getSignupForm);
 router.route('/me').get(authController.protect, viewsController.getAccount);
 router
   .route('/my-bookings') // booked tours of current user

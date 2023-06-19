@@ -831,6 +831,7 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  justify-content: flex-end;
 }
 .footer__nav li {
   margin-left: 1.5rem;
@@ -1222,7 +1223,8 @@ body {
   margin: 0 auto;
 }
 
-.login-form {
+.login-form,
+.signup-form {
   margin: 0 auto;
   max-width: 55rem;
   background-color: #fff;

@@ -57,6 +57,16 @@ exports.getLoginForm = (req, res) => {
 };
 
 /**
+ * @description - Get signup page
+ * @route - GET /signup
+ */
+exports.getSignupForm = (req, res) => {
+  res.status(200).render('signup', {
+    title: 'Create your account',
+  });
+};
+
+/**
  * @description - Get account page
  * @route - GET /me
  */
