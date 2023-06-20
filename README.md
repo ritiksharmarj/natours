@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="https://natours-adventure.vercel.app/"><img src="https://github.com/ritiksharmarj/natours/assets/54701022/326dd79a-8751-4d1d-883f-b302cf0461c5" alt="Natours" width="200"></a>
+  <a href="https://natours-xbsh.onrender.com/"><img src="https://github.com/ritiksharmarj/natours/assets/54701022/326dd79a-8751-4d1d-883f-b302cf0461c5" alt="Natours" width="200"></a>
   <br>
   Natours
   <br>
@@ -25,16 +25,17 @@
 
 ## Deployed Version
 
-Live demo (Feel free to visit) 👉 : https://natours-adventure.vercel.app/
+Live demo (Feel free to visit) 👉 : https://natours-xbsh.onrender.com/
 
 ## Key Features
 
 - Authentication and Authorization
-  - Login and logout
+  - Signup, Login and logout
 - Tour
-  - Manage booking, check tours map, check users' reviews and rating
+  - Manage booking, check tours map, check user's reviews and ratings
 - User profile
-  - Update username, photo, email, and password
+  - Update username, profile photo, email, and password
+- Credit card payment using Stripe
 
 ## Demonstration
 
@@ -54,7 +55,28 @@ Live demo (Feel free to visit) 👉 : https://natours-adventure.vercel.app/
 
 ![rsz_adminprofile](https://user-images.githubusercontent.com/58518192/72607648-4d463a80-394b-11ea-972f-a73160cfaa5b.png)
 
-## Update your profile
+## How To Use
+
+### Book a tour
+
+- Login or Signup to the site
+- Search for tours that you want to book
+- Book a tour
+- Proceed to the payment using Stripe
+- Enter the card details (Test Mode):
+  ```
+  - Card No. : 4242 4242 4242 4242
+  - Expiry date: any
+  - CVV: any
+  ```
+- Finished!
+
+### Manage your booking
+
+- Check the tour you have booked in "Manage Booking" page in your user settings. You'll be automatically redirected to this
+  page after you have completed the booking.
+
+### Update your profile
 
 - You can update your own username, profile photo, email and password.
 
@@ -63,7 +85,7 @@ Live demo (Feel free to visit) 👉 : https://natours-adventure.vercel.app/
 Before using the API, you need to set the variables in Postman depending on your environment (development or production). Simply add:
 
 ```
-- {{URL}} with your hostname as value (Eg. http://127.0.0.1:8000 or http://www.example.com)
+- {{URL}} with your hostname as value (e.g. http://127.0.0.1:8000 or http://www.example.com)
 - {{password}} with your user password as value.
 ```
 
@@ -71,33 +93,31 @@ Check [Natours API Documentation](https://documenter.getpostman.com/view/8689170
 
 <b> API Features: </b>
 
-Tours List 👉 https://natours-adventure.vercel.app/api/v1/tours
+Tours List 👉 https://natours-xbsh.onrender.com/api/v1/tours
 
-Tours State 👉 https://natours-adventure.vercel.app/api/v1/tours/tour-stats
+Tours Statistics 👉 https://natours-xbsh.onrender.com/api/v1/tours/tour-stats
 
-Get Top 5 Cheap Tours 👉 https://natours-adventure.vercel.app/api/v1/tours/top-5-cheap
+Get Top 5 Cheap Tours 👉 https://natours-xbsh.onrender.com/api/v1/tours/top-5-cheap
 
-Get Tours Within Radius 👉 https://natours-adventure.vercel.app/api/v1/tours/tours-within/200/center/34.098453,-118.096327/unit/mi
+Get Tours Within Radius 👉 https://natours-xbsh.onrender.com/api/v1/tours/tours-within/200/center/34.098453,-118.096327/unit/mi
 
 ## Deployment
 
-The website is deployed with git into vercel. Below are the steps taken:
+The website is deployed using git on render.com. Below are the steps taken:
 
 ```
 git init
 git add -A
 git commit -m "Commit message"
 git push origin main
-npm i -g vercel
-vercel
-vercel --prod
-Set environment to vercel, go to project > project settings > environment variables
+
+deploy on render > web service
 ```
 
-You can also change your website url by:
+Set environment variables to render:
 
 ```
-go to project > project settings > domains
+go to dashboard > project > environment
 ```
 
 ## Build With
@@ -111,15 +131,13 @@ go to project > project settings > domains
 - [ParcelJS](https://parceljs.org/) - Blazing fast, zero configuration web application bundler
 - [Stripe](https://stripe.com/) - Online payment API
 - [Postman](https://www.getpostman.com/) - API testing
-- [Mailtrap](https://mailtrap.io/) - Email delivery platform
-- [Vercel](https://vercel.com/) - Cloud platform
+- [Mailtrap](https://mailtrap.io/) & [Mailgun](https://www.mailgun.com/) - Email delivery platform
+- [Render](https://render.com/) - Cloud platform
 
 ## To-do
 
-- Bookings payments
-  - Allow user to book a tour and pay using credit card and manage bookings
 - Review and rating
-  - Allow user to add a review directly at the website after they have taken a tour
+  - Allow user to add a review directly at the website after they have booked a tour
 - Booking
   - Prevent duplicate bookings after user has booked that exact tour, implement favourite tours
 - Advanced authentication features
@@ -135,11 +153,9 @@ dependencies by running
 $ npm i
 set your env variables
 $ npm run watch
-$ npm run build
 $ npm run dev (for development)
 $ npm run prod (for production)
 $ npm run debug (for debug)
-$ npm start
 ```
 
 ## Known Bugs
@@ -149,7 +165,6 @@ Please enjoy and feel free to share your opinion, constructive criticism, or com
 
 ## Future Updates
 
-- Enable credit card payment
 - Improve overall UX/UI and fix bugs
 - Featured Tours
 - Recently Viewed Tours
