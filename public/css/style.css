@@ -1372,7 +1372,7 @@ body {
 
   .alert {
     font-size: 14px;
-    padding: 30px 16px;
+    padding: 24px 16px;
     width: 90%;
   }
 
@@ -1386,5 +1386,71 @@ body {
 
   .user-view__form-container {
     padding: 0;
+  }
+
+  .section-header {
+    height: 400px;
+  }
+
+  .heading-box {
+    width: 100%;
+    padding: 0 20px;
+    top: 40%;
+  }
+
+  .heading-primary {
+    width: 100%;
+    font-size: 40px;
+  }
+
+  .section-description {
+    flex-direction: column;
+  }
+
+  .overview-box {
+    padding: 80px 20px 60px 20px;
+    justify-content: flex-start;
+  }
+
+  .description-box {
+    padding: 60px 20px 80px 20px;
+  }
+
+  .section-pictures {
+    flex-direction: column;
+  }
+
+  .picture-box__img--1,
+  .picture-box__img--2,
+  .picture-box__img--3 {
+    padding: 0;
+  }
+
+  .reviews {
+    grid-column-gap: 30px;
+  }
+
+  .reviews:before,
+  .reviews:after {
+    width: 0;
+  }
+
+  .section-cta {
+    padding: 120px 20px 60px 20px;
+  }
+
+  .cta {
+    padding: 30px;
+  }
+
+  .cta__img {
+    display: none;
+  }
+
+  .cta__content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
   }
 }
