@@ -1325,3 +1325,66 @@ body {
   -webkit-transform: translateY(-2px);
   transform: translateY(-2px);
 }
+
+/* Mobile responsive */
+@media screen and (max-width: 767px) {
+  .header {
+    flex-wrap: wrap;
+    padding: 0 20px;
+    flex-direction: row !important;
+    align-items: center;
+  }
+
+  .header__logo {
+    margin: 0;
+  }
+
+  .nav--tours {
+    display: none;
+  }
+
+  .nav--user {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex: auto;
+    gap: 10px;
+  }
+
+  .nav--user a {
+    margin: 0 !important;
+  }
+
+  .main {
+    padding: 60px 20px;
+  }
+
+  .card-container {
+    max-width: 100%;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 40px;
+  }
+
+  .login-form,
+  .signup-form {
+    padding: 60px 30px;
+  }
+
+  .alert {
+    font-size: 14px;
+    padding: 30px 16px;
+    width: 90%;
+  }
+
+  .user-view {
+    flex-direction: column;
+  }
+
+  .user-view__content {
+    padding: 60px 30px;
+  }
+
+  .user-view__form-container {
+    padding: 0;
+  }
+}
