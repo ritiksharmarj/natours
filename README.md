@@ -39,7 +39,7 @@ Live demo (Feel free to visit) 👉 : https://natours-xbsh.onrender.com/
 
 ## Demonstration
 
-[![Natours Walkthrough](https://github.com/ritiksharmarj/natours/assets/54701022/bf74694d-ceca-40fa-b5b0-180ad7f40606)](https://youtu.be/UljiMtXeFx0)
+[![Natours Walkthrough](https://img.youtube.com/vi/UljiMtXeFx0/maxresdefault.jpg)](https://www.youtube.com/watch?v=UljiMtXeFx0)
 
 ## How To Use
 
