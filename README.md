@@ -39,21 +39,7 @@ Live demo (Feel free to visit) 👉 : https://natours-xbsh.onrender.com/
 
 ## Demonstration
 
-#### Home Page :
-
-![natoursHomePageonline-video-cutt](https://user-images.githubusercontent.com/58518192/72606801-7ebe0680-3949-11ea-8e88-613f022a64e5.gif)
-
-#### Tour Details :
-
-![tourOverviewonline-video-cutterc](https://user-images.githubusercontent.com/58518192/72606859-a0b78900-3949-11ea-8f0d-ef44c789957b.gif)
-
-#### User Profile :
-
-![rsz_userprofile](https://user-images.githubusercontent.com/58518192/72607635-44edff80-394b-11ea-8943-64c48f6f19aa.png)
-
-#### Admin Profile :
-
-![rsz_adminprofile](https://user-images.githubusercontent.com/58518192/72607648-4d463a80-394b-11ea-972f-a73160cfaa5b.png)
+[![Natours Walkthrough](https://github.com/ritiksharmarj/natours/assets/54701022/bf74694d-ceca-40fa-b5b0-180ad7f40606)](https://youtu.be/UljiMtXeFx0)
 
 ## How To Use
 
