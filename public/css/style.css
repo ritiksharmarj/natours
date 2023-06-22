@@ -608,6 +608,7 @@ body {
   overflow-x: scroll;
   -ms-scroll-snap-type: x mandatory;
   scroll-snap-type: x mandatory;
+  scrollbar-width: none;
 }
 .reviews__card {
   width: 30rem;
@@ -1324,6 +1325,10 @@ body {
   box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
   -webkit-transform: translateY(-2px);
   transform: translateY(-2px);
+}
+
+.reviews::-webkit-scrollbar {
+  display: none;
 }
 
 /* Mobile responsive */
